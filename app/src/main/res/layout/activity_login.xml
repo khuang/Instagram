@@ -32,12 +32,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPassword"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/white"
         android:backgroundTint="@color/blue_5"
-        android:text="Log In" />
+        android:text="Log in"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
 
     <ImageView
-        android:id="@+id/ivLogo"
+        android:id="@+id/ivNewUser"
         android:layout_width="301dp"
         android:layout_height="88dp"
         android:layout_alignParentTop="true"
@@ -52,7 +53,7 @@
         android:layout_alignStart="@+id/etUsername"
         android:layout_below="@+id/btnLogin"
         android:backgroundTint="@color/green_5"
-        android:textColor="@color/white"
-        android:text="Sign Up" />
-</RelativeLayout
-    >
+        android:text="Sign up"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+</RelativeLayout>
