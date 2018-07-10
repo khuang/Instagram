@@ -32,8 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPassword"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/blue_5"
-        android:backgroundTint="@color/grey_0"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/blue_5"
         android:text="Log In" />
 
     <ImageView
@@ -44,5 +44,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="103dp"
         app:srcCompat="@drawable/nav_logo_whiteout" />
+
+    <Button
+        android:id="@+id/btnSignup"
+        android:layout_width="354dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etUsername"
+        android:layout_below="@+id/btnLogin"
+        android:backgroundTint="@color/green_5"
+        android:textColor="@color/white"
+        android:text="Sign Up" />
 </RelativeLayout
     >

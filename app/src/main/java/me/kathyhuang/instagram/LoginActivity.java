@@ -20,6 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.etUsername) EditText etUsername;
     @BindView(R.id.etPassword) EditText etPassword;
     @BindView(R.id.btnLogin) Button btnLogin;
+    @BindView(R.id.btnSignup) Button btnSignup;
 
 
     @Override
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         getSupportActionBar().hide();
+
     }
 
     private void login(String username, String password){
