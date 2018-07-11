@@ -1,10 +1,16 @@
 package me.kathyhuang.instagram.models;
 
+import android.text.format.DateUtils;
+
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 @ParseClassName("Post")
@@ -36,6 +42,15 @@ public class Post extends ParseObject{
 
     public void setUser(ParseUser user){
         put(KEY_USER, user);
+    }
+
+    public String getCreatedDateString(){
+        Date date = getCreatedAt();
+        String postFormat = "EEE MMM dd yyyy hh:mm:ss aaa";
+        SimpleDateFormat sf = new SimpleDateFormat(postFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        return sf.format(date);
     }
 
     public static class Query extends ParseQuery<Post>{

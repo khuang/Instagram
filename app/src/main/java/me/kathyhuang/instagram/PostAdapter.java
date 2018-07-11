@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,9 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +56,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
         holder.tvDescription.setText(post.getDescription());
         holder.tvUsername.setText(post.getUser().getUsername());
+        holder.tvCreatedAt.setText(post.getCreatedDateString());
 
         Glide.with(context)
                 .load(post.getImage().getUrl())
@@ -81,6 +85,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         @BindView(R.id.tvDescription) TextView tvDescription;
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.ivPicture) ParseImageView ivPicture;
+        @BindView(R.id.tvCreatedAt) TextView tvCreatedAt;
 
         public ViewHolder(View itemView){
             super(itemView);
