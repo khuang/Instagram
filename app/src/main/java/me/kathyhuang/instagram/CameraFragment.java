@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import butterknife.BindView;
@@ -35,8 +36,9 @@ public class CameraFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    @BindView(R.id.btnTakePic) Button btnTakePic;
+    @BindView(R.id.btnPost) Button btnPost;
     @BindView(R.id.ivPreview) ImageView ivPreview;
+    @BindView(R.id.etDescription) EditText etDescription;
     private Unbinder unbinder;
 
     public CameraFragment() {
@@ -77,10 +79,10 @@ public class CameraFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        btnTakePic.setOnClickListener(new View.OnClickListener() {
+        btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onLaunchCamera(view);
+                mListener.onPostClick(view);
             }
         });
         return view;
@@ -121,6 +123,7 @@ public class CameraFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onLaunchCamera(View view);
+
+        void onPostClick(View view);
     }
 }

@@ -109,6 +109,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
                         viewPager.setCurrentItem(0);
                         return true;
                     case R.id.action_create:
+                        onLaunchCamera(new View(HomeActivity.this));
                         viewPager.setCurrentItem(1);
                         return true;
                     case R.id.action_profile:
@@ -194,7 +195,6 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         finish();
     }
 
-    @Override
     public void onLaunchCamera(View view) {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -247,6 +247,11 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onPostClick(View view) {
+
     }
 }
 

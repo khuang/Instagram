@@ -30,6 +30,13 @@ public class LoginActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if(currentUser != null){
+            final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         btnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
