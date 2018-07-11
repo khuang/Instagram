@@ -29,6 +29,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -60,6 +61,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        ParseObject.registerSubclass(Post.class);
 
         getSupportActionBar().hide();
 
@@ -141,26 +143,6 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         });
     }
 
-    private void loadTopPosts(){
-        final Post.Query postsQuery = new Post.Query();
-
-        postsQuery.getTop().withUser();
-
-        postsQuery.findInBackground(new FindCallback<Post>(){
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if(e == null){
-                    for(int i = 0; i < objects.size(); i++){
-                        Log.d("HomeActivity", "Post [" + i + "] = " + objects.get(i).getDescription()
-                                + "\nusername = " + objects.get(i).getUser().getUsername());
-                    }
-
-                }else{
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     static class BottomNavAdapter extends FragmentStatePagerAdapter {
 
@@ -250,8 +232,13 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
     }
 
     @Override
-    public void onPostClick(View view) {
-
+    public void onPostButtonClicked(View view) {
+        ParseFile parseFile = new ParseFile(photoFile);
+        String description = ((CameraFragment)fragments.get(1)).etDescription.getText().toString();
+        createPost(description, parseFile, ParseUser.getCurrentUser());
+        Toast.makeText(HomeActivity.this, "Posted.", Toast.LENGTH_SHORT).show();
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
+        viewPager.setCurrentItem(0);
     }
 }
 

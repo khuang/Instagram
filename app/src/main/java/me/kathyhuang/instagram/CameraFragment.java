@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -82,7 +85,7 @@ public class CameraFragment extends Fragment {
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onPostClick(view);
+                mListener.onPostButtonClicked(view);
             }
         });
         return view;
@@ -124,6 +127,6 @@ public class CameraFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
 
-        void onPostClick(View view);
+        void onPostButtonClicked(View view);
     }
 }
