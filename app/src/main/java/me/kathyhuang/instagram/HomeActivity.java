@@ -3,6 +3,8 @@ package me.kathyhuang.instagram;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -34,7 +36,10 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +55,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     File photoFile;
+    File resizedFile;
     private boolean flag;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
@@ -118,8 +124,8 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
                             onLaunchCamera(new View(HomeActivity.this));
                             flag = true;
                         }
-
                         viewPager.setCurrentItem(1);
+                        flag = false;
                         return true;
                     case R.id.action_profile:
                         viewPager.setCurrentItem(2);
@@ -151,7 +157,6 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
             }
         });
     }
-
 
     static class BottomNavAdapter extends FragmentStatePagerAdapter {
 
@@ -228,13 +233,31 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+
                 // by this point we have the camera photo on disk
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                // RESIZE BITMAP, see section below
-                // Load the taken image into a preview
-                //ivPreview.setImageBitmap(takenImage);
-                ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(takenImage);
+                Bitmap rawTakenImage = rotateBitmapOrientation(photoFile.getAbsolutePath());
+                // See BitmapScaler.java: https://gist.github.com/nesquena/3885707fd3773c09f1bb
+                Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, 1000);
+
+                // Configure byte output stream
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                // Compress the image further
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
+                File resizedUri = getPhotoFileUri(photoFileName + "_resized");
+                resizedFile = new File(resizedUri.getPath());
+                try {
+                    resizedFile.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(resizedFile);
+                    fos.write(bytes.toByteArray());
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(resizedBitmap);
             } else { // Result was a failure
+                ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(null);
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
@@ -242,7 +265,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
 
     @Override
     public void onPostButtonClicked(View view) {
-        ParseFile parseFile = new ParseFile(photoFile);
+        ParseFile parseFile = new ParseFile(resizedFile);
         String description = ((CameraFragment)fragments.get(1)).etDescription.getText().toString();
         createPost(description, parseFile, ParseUser.getCurrentUser());
         Toast.makeText(HomeActivity.this, "Posted.", Toast.LENGTH_SHORT).show();
@@ -250,6 +273,34 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         viewPager.setCurrentItem(0);
         ((CameraFragment)fragments.get(1)).etDescription.setText(null);
         ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(null);
+    }
+
+    public Bitmap rotateBitmapOrientation(String photoFilePath) {
+        // Create and configure BitmapFactory
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoFilePath, bounds);
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        Bitmap bm = BitmapFactory.decodeFile(photoFilePath, opts);
+        // Read EXIF Data
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(photoFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+        int orientation = orientString != null ? Integer.parseInt(orientString) : ExifInterface.ORIENTATION_NORMAL;
+        int rotationAngle = 0;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) rotationAngle = 90;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_180) rotationAngle = 180;
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
+        // Rotate Bitmap
+        Matrix matrix = new Matrix();
+        matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+        // Return result
+        return rotatedBitmap;
     }
 }
 

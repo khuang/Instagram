@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseImageView;
 
 import java.util.List;
 
@@ -78,7 +80,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
         @BindView(R.id.tvDescription) TextView tvDescription;
         @BindView(R.id.tvUsername) TextView tvUsername;
-        @BindView(R.id.ivPicture) ImageView ivPicture;
+        @BindView(R.id.ivPicture) ParseImageView ivPicture;
 
         public ViewHolder(View itemView){
             super(itemView);

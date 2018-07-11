@@ -12,17 +12,17 @@
         android:id="@+id/btnPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="83dp"
+        android:layout_below="@id/etDescription"
+        android:layout_marginTop="30dp"
         android:text="Post"
         android:textAllCaps="false" />
 
-    <ImageView
+    <com.parse.ParseImageView
         android:id="@+id/ivPreview"
         android:layout_width="match_parent"
-        android:layout_height="305dp"
-        android:layout_alignParentStart="true"
+        android:layout_height="400dp"
+        android:layout_marginTop="30dp"
         android:layout_alignParentTop="true"
         android:src="@color/transparent" />
 
