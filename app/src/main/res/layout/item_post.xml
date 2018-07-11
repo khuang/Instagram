@@ -7,7 +7,7 @@
     <com.parse.ParseImageView
         android:id="@+id/ivPicture"
         android:layout_width="match_parent"
-        android:layout_height="307dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tvUsername"
         app:srcCompat="@android:color/black"

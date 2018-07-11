@@ -89,6 +89,12 @@ public class FeedFragment extends Fragment {
         unbinder.unbind();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadTopPosts();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -103,7 +109,7 @@ public class FeedFragment extends Fragment {
 
     }
 
-    private void loadTopPosts(){
+    public void loadTopPosts(){
         final Post.Query postsQuery = new Post.Query();
 
         postsQuery.getTop().withUser();

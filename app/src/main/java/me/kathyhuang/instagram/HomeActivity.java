@@ -50,6 +50,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     File photoFile;
+    private boolean flag;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.pager) ViewPager viewPager;
@@ -62,6 +63,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         ParseObject.registerSubclass(Post.class);
+        flag = false;
 
         getSupportActionBar().hide();
 
@@ -109,13 +111,19 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
                 switch(item.getItemId()){
                     case R.id.action_home:
                         viewPager.setCurrentItem(0);
+                        flag = false;
                         return true;
                     case R.id.action_create:
-                        onLaunchCamera(new View(HomeActivity.this));
+                        if (!flag) {
+                            onLaunchCamera(new View(HomeActivity.this));
+                            flag = true;
+                        }
+
                         viewPager.setCurrentItem(1);
                         return true;
                     case R.id.action_profile:
                         viewPager.setCurrentItem(2);
+                        flag = false;
                         return true;
                     default:
                         return false;
@@ -136,6 +144,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
             public void done(ParseException e) {
                 if(e == null){
                     Log.d("HomeActivity", "Create Post Success");
+                    ((FeedFragment)fragments.get(0)).loadTopPosts();
                 }else{
                     e.printStackTrace();
                 }
@@ -239,6 +248,8 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         Toast.makeText(HomeActivity.this, "Posted.", Toast.LENGTH_SHORT).show();
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         viewPager.setCurrentItem(0);
+        ((CameraFragment)fragments.get(1)).etDescription.setText(null);
+        ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(null);
     }
 }
 
