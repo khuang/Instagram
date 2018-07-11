@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,6 +30,7 @@ import me.kathyhuang.instagram.models.Post;
 public class FeedFragment extends Fragment {
 
     @BindView(R.id.rvPosts) RecyclerView rvPosts;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     private Unbinder unbinder;
 
@@ -61,6 +63,24 @@ public class FeedFragment extends Fragment {
         rvPosts.setAdapter(postAdapter);
 
         loadTopPosts();
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                loadTopPosts();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
 
         return view;
 
@@ -132,4 +152,6 @@ public class FeedFragment extends Fragment {
             }
         });
     }
+
+
 }
