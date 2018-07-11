@@ -241,8 +241,8 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
-                //ImageView ivPreview = (ImageView) findViewById(R.id.ivPreview);
                 //ivPreview.setImageBitmap(takenImage);
+                ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(takenImage);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }

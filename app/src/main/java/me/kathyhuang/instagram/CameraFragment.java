@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +36,7 @@ public class CameraFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     @BindView(R.id.btnTakePic) Button btnTakePic;
+    @BindView(R.id.ivPreview) ImageView ivPreview;
     private Unbinder unbinder;
 
     public CameraFragment() {
