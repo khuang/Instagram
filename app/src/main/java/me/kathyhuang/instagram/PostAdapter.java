@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -99,6 +100,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         @BindView(R.id.tvCreatedAt) TextView tvCreatedAt;
         @BindView(R.id.tvUsername2) TextView tvUsername2;
         @BindView(R.id.ivProfilePic) ParseImageView ivProfilePic;
+        @BindView(R.id.btnLike) ImageButton btnLike;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -106,7 +108,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             //bind views from xml file
             ButterKnife.bind(this, itemView);
 
+            btnLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    view.setSelected(!view.isSelected());
+                }
+            });
+
         }
+
 
     }
 }
