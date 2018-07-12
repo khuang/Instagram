@@ -13,6 +13,7 @@
 
     <TextView
         android:id="@+id/tvUsername"
+        android:layout_marginTop="7dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -64,6 +65,7 @@
 
     <ImageView
         android:id="@+id/ivMenu"
+        android:layout_marginTop="7dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

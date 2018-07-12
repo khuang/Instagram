@@ -15,7 +15,9 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/etDescription"
         android:layout_marginTop="30dp"
-        android:text="Post"
+        android:backgroundTint="@color/blue_5"
+        android:textColor="@color/white"
+        android:text="Share"
         android:textAllCaps="false" />
 
     <com.parse.ParseImageView

@@ -28,6 +28,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -54,6 +56,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
     private final List<Fragment> fragments = new ArrayList<>();
     public final String APP_TAG = "Instagram";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public final static int CAPTURE_PROFILE_IMAGE_ACTIVITY_REQUEST_CODE = 1000;
     public String photoFileName = "photo.jpg";
     File photoFile;
     File resizedFile;
@@ -237,13 +240,13 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == CAPTURE_PROFILE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
                 // by this point we have the camera photo on disk
                 Bitmap rawTakenImage = rotateBitmapOrientation(photoFile.getAbsolutePath());
                 // See BitmapScaler.java: https://gist.github.com/nesquena/3885707fd3773c09f1bb
-                Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, 1000);
+                final Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, 1000);
 
                 // Configure byte output stream
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -261,9 +264,32 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
                     e.printStackTrace();
                 }
 
-                ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(resizedBitmap);
+                if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+                    ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(resizedBitmap);
+                }else{
+                    ParseFile parseFile = new ParseFile(resizedFile);
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    currentUser.put("profilePic", parseFile);
+                    currentUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            Glide.with(HomeActivity.this)
+                                .load(resizedBitmap)
+                                        .apply(
+                                                RequestOptions.circleCropTransform()
+                                        )
+                                        .into(((ProfileFragment)fragments.get(2)).ivProfilePic);
+
+                            Toast.makeText(HomeActivity.this, "Profile picture updated.", Toast.LENGTH_LONG).show();
+                            viewPager.setCurrentItem(2);
+                        }
+                    });
+                }
+
             } else { // Result was a failure
-                ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(null);
+                if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+                    ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(null);
+                }
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
@@ -277,6 +303,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         Toast.makeText(HomeActivity.this, "Posted.", Toast.LENGTH_SHORT).show();
         bottomNavigationView.setSelectedItemId(R.id.action_home);
         viewPager.setCurrentItem(0);
+        ((FeedFragment)fragments.get(0)).rvPosts.scrollToPosition(0);
         ((CameraFragment)fragments.get(1)).etDescription.setText(null);
         ((CameraFragment)fragments.get(1)).ivPreview.setImageBitmap(null);
     }
@@ -307,6 +334,26 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
         // Return result
         return rotatedBitmap;
+    }
+
+    public void onLaunchProfileCamera(View view) {
+        // create Intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Create a File reference to access to future access
+        photoFile = getPhotoFileUri(photoFileName);
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+        Uri fileProvider = FileProvider.getUriForFile(HomeActivity.this, "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, CAPTURE_PROFILE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
     }
 }
 

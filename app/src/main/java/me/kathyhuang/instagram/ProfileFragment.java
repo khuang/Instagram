@@ -8,6 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.parse.Parse;
+import com.parse.ParseImageView;
+import com.parse.ParseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,6 +23,8 @@ import butterknife.Unbinder;
 public class ProfileFragment extends Fragment {
 
     @BindView(R.id.btnLogout) Button btnLogout;
+    @BindView(R.id.ivProfilePic) ParseImageView ivProfilePic;
+    @BindView(R.id.tvUsername) TextView tvUsername;
 
     private Unbinder unbinder;
     private OnFragmentInteractionListener mListener;
@@ -43,6 +52,22 @@ public class ProfileFragment extends Fragment {
                 mListener.onLogoutButtonPressed(view);
             }
         });
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        String profilePic = currentUser.getParseFile("profilePic").getUrl();
+
+        if(profilePic != null){
+
+            Glide.with(getContext())
+                    .load(profilePic)
+                    .apply(
+                            RequestOptions.circleCropTransform()
+                    )
+                    .into(ivProfilePic);
+        }
+
+        tvUsername.setText(currentUser.getUsername());
         return view;
 
     }
