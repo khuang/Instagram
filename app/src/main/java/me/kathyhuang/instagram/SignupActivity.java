@@ -33,8 +33,6 @@ public class SignupActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        getSupportActionBar().hide();
-
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ShowToast")
             @Override

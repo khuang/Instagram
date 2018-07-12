@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        getSupportActionBar().hide();
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -54,17 +54,19 @@ public class ProfileFragment extends Fragment {
         });
 
         ParseUser currentUser = ParseUser.getCurrentUser();
+        try{
+            String profilePic = currentUser.getParseFile("profilePic").getUrl();
+            if(profilePic != null){
 
-        String profilePic = currentUser.getParseFile("profilePic").getUrl();
-
-        if(profilePic != null){
-
-            Glide.with(getContext())
-                    .load(profilePic)
-                    .apply(
-                            RequestOptions.circleCropTransform()
-                    )
-                    .into(ivProfilePic);
+                Glide.with(getContext())
+                        .load(profilePic)
+                        .apply(
+                                RequestOptions.circleCropTransform()
+                        )
+                        .into(ivProfilePic);
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }
 
         tvUsername.setText(currentUser.getUsername());
