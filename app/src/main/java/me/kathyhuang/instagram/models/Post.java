@@ -2,6 +2,7 @@ package me.kathyhuang.instagram.models;
 
 import android.text.format.DateUtils;
 
+import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;

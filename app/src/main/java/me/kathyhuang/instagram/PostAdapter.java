@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -65,6 +66,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 .load(post.getImage().getUrl())
                 .into(holder.ivPicture);
 
+        Glide.with(context)
+                .load(post.getUser().getParseFile("profilePic").getUrl())
+                .apply(
+                        RequestOptions.circleCropTransform()
+                )
+                .into(holder.ivProfilePic);
+
     }
 
     @Override
@@ -90,6 +98,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         @BindView(R.id.ivPicture) ParseImageView ivPicture;
         @BindView(R.id.tvCreatedAt) TextView tvCreatedAt;
         @BindView(R.id.tvUsername2) TextView tvUsername2;
+        @BindView(R.id.ivProfilePic) ParseImageView ivProfilePic;
 
         public ViewHolder(View itemView){
             super(itemView);
