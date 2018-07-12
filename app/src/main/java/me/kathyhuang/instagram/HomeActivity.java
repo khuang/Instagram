@@ -18,6 +18,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
     @BindView(R.id.pager) ViewPager viewPager;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     private BottomNavAdapter adapter;
 
@@ -71,7 +73,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         ParseObject.registerSubclass(Post.class);
         flag = false;
 
-        getSupportActionBar().hide();
+//        getSupportActionBar( ..hide();
 
         fragments.add(new FeedFragment());
         fragments.add(new CameraFragment());
@@ -137,6 +139,10 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
             }
         });
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setElevation(
+                getResources().getDimensionPixelSize(R.dimen.action_bar_elevation)
+        );
     }
 
     private void createPost(String description, ParseFile imageFile, ParseUser user){

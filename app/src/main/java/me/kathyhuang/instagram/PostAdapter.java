@@ -19,6 +19,8 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -57,6 +59,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         holder.tvDescription.setText(post.getDescription());
         holder.tvUsername.setText(post.getUser().getUsername());
         holder.tvCreatedAt.setText(post.getCreatedDateString());
+        holder.tvUsername2.setText(post.getUser().getUsername());
 
         Glide.with(context)
                 .load(post.getImage().getUrl())
@@ -86,6 +89,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         @BindView(R.id.tvUsername) TextView tvUsername;
         @BindView(R.id.ivPicture) ParseImageView ivPicture;
         @BindView(R.id.tvCreatedAt) TextView tvCreatedAt;
+        @BindView(R.id.tvUsername2) TextView tvUsername2;
 
         public ViewHolder(View itemView){
             super(itemView);

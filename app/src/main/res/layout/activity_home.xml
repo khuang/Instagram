@@ -6,6 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:paddingEnd="@dimen/keyline_normal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="?actionBarSize"
+            android:layout_gravity="left"
+            android:tint="@color/black"
+            app:srcCompat="@drawable/camera_shadow_fill" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="?actionBarSize"
+            android:layout_gravity="right"
+            android:outlineSpotShadowColor="@color/black"
+            app:srcCompat="@drawable/direct" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="?actionBarSize"
+            android:layout_gravity="center"
+            android:tint="@android:color/black"
+            app:srcCompat="@drawable/ic_instagram_brand" />
+
+
+    </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -15,7 +46,6 @@
         android:layout_alignParentStart="true"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom_navigation" />
 
     <android.support.v4.view.ViewPager
@@ -23,6 +53,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/toolbar"
         android:layout_above="@id/bottom_navigation"/>
 </RelativeLayout>
