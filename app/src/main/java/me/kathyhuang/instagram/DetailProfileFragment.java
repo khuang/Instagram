@@ -65,6 +65,7 @@ public class DetailProfileFragment extends Fragment {
 
 
         try{
+            tvUsername.setText(user.getUsername());
             String profilePic = user.getParseFile("profilePic").getUrl();
             if(profilePic != null){
 
@@ -78,8 +79,6 @@ public class DetailProfileFragment extends Fragment {
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-
-        tvUsername.setText(user.getUsername());
 
         // Define the class we would like to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
