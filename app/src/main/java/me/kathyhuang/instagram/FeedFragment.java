@@ -37,11 +37,7 @@ public class FeedFragment extends Fragment {
     PostAdapter postAdapter;
     ArrayList<Post> posts;
 
-    private OnFragmentInteractionListener mListener;
-
-    public FeedFragment() {
-        // Required empty public constructor
-    }
+    private PostAdapter.Callback callback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +53,7 @@ public class FeedFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         posts = new ArrayList<Post>();
-        postAdapter = new PostAdapter(posts);
+        postAdapter = new PostAdapter(posts, callback);
 
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         rvPosts.setAdapter(postAdapter);
@@ -89,8 +85,9 @@ public class FeedFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+
+        if (context instanceof PostAdapter.Callback) {
+            callback = (PostAdapter.Callback) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -100,7 +97,7 @@ public class FeedFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        callback = null;
     }
 
     @Override

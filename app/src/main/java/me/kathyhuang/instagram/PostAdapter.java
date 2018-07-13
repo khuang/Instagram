@@ -20,6 +20,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
+import com.parse.ParseUser;
 
 import org.w3c.dom.Text;
 
@@ -33,11 +34,18 @@ import me.kathyhuang.instagram.models.Post;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
+    interface Callback {
+        void passUser(@NonNull ParseUser user);
+    }
+
+    private Callback inputCallback;
+
     private List<Post> mPosts;
     Context context;
 
-    public PostAdapter(List<Post> posts){
+    public PostAdapter(List<Post> posts, Callback callback){
         mPosts = posts;
+        inputCallback = callback;
     }
 
     //for each row, inflate the layout and cache references in the ViewHolder
@@ -48,7 +56,35 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.item_post, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
+
+        viewHolder.tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputCallback.passUser(
+                        mPosts.get(viewHolder.getAdapterPosition()).getUser()
+                );
+            }
+        });
+
+        viewHolder.tvUsername2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                inputCallback.passUser(
+                        mPosts.get(viewHolder.getAdapterPosition()).getUser()
+                );
+            }
+        });
+
+        viewHolder.ivProfilePic.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                inputCallback.passUser(
+                        mPosts.get(viewHolder.getAdapterPosition()).getUser()
+                );
+            }
+        });
+
         return viewHolder;
     }
 

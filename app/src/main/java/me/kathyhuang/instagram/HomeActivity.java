@@ -51,7 +51,10 @@ import butterknife.ButterKnife;
 import me.kathyhuang.instagram.models.Post;
 
 public class HomeActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
-        FeedFragment.OnFragmentInteractionListener,CameraFragment.OnFragmentInteractionListener{
+        FeedFragment.OnFragmentInteractionListener,
+        CameraFragment.OnFragmentInteractionListener,
+        DetailProfileFragment.OnFragmentInteractionListener,
+        PostAdapter.Callback {
 
     private final List<Fragment> fragments = new ArrayList<>();
     public final String APP_TAG = "Instagram";
@@ -81,6 +84,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
         fragments.add(new FeedFragment());
         fragments.add(new CameraFragment());
         fragments.add(new ProfileFragment());
+        fragments.add(new DetailProfileFragment());
 
         adapter = new BottomNavAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
@@ -165,6 +169,40 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
                 }
             }
         });
+    }
+
+//    public void onUserProfileClick(View view) {
+//
+//        String user = view.toString();
+//        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+//        // Define our query conditions
+//        query.whereEqualTo("user", user);
+//        query.findInBackground(new FindCallback<ParseUser>() {
+//            @Override
+//            public void done(List<ParseUser> objects, ParseException e) {
+//                if(e == null){
+//                    ((DetailProfileFragment)fragments.get(3)).user = objects.get(0);
+//                }else{
+//                    e.printStackTrace();
+//                }
+//        }
+//    });
+//        viewPager.setCurrentItem(3);
+//
+//    }
+
+    @Override
+    public void passUser(@NonNull ParseUser mUser) {
+
+        String objectId = mUser.getObjectId();
+        String id = ParseUser.getCurrentUser().getObjectId();
+
+        if(objectId.equals(id)){
+            viewPager.setCurrentItem(2);
+        }else{
+            ((DetailProfileFragment)fragments.get(3)).user = mUser;
+            viewPager.setCurrentItem(3);
+        }
     }
 
     static class BottomNavAdapter extends FragmentStatePagerAdapter {
