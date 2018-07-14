@@ -84,4 +84,14 @@
         android:layout_below="@id/ivPicture"
         android:backgroundTint="@color/transparent"
         app:srcCompat="@drawable/like_icon" />
+
+    <TextView
+        android:id="@+id/tvLikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPicture"
+        android:layout_toRightOf="@id/btnLike"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:layout_marginTop="12dp"
+        android:text="TextView" />
 </RelativeLayout>

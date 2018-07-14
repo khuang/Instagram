@@ -1,16 +1,22 @@
 package me.kathyhuang.instagram.models;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -20,6 +26,7 @@ public class Post extends ParseObject{
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_USER = "user";
+    private static final String KEY_LIKES = "likedBy";
 
     public String getDescription(){
         return getString(KEY_DESCRIPTION);
@@ -44,6 +51,15 @@ public class Post extends ParseObject{
     public void setUser(ParseUser user){
         put(KEY_USER, user);
     }
+
+    public List<String> getLikes(){
+        return getList(KEY_LIKES);
+    }
+
+    public void setLikes(List<String> list){ ;
+        put(KEY_LIKES, list);
+    }
+
 
     public String getCreatedDateString(){
         Date date = getCreatedAt();

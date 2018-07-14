@@ -42,6 +42,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     private List<Post> mPosts;
     Context context;
+    private List<String> likes;
+    String userId;
+    private Post post;
 
     public PostAdapter(List<Post> posts, Callback callback){
         mPosts = posts;
@@ -92,7 +95,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //get data according to position
-        Post post = mPosts.get(position);
+        post = mPosts.get(position);
+
+        userId = ParseUser.getCurrentUser().getObjectId();
 
         holder.tvDescription.setText(post.getDescription());
         holder.tvUsername.setText(post.getUser().getUsername());
@@ -109,6 +114,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                         RequestOptions.circleCropTransform()
                 )
                 .into(holder.ivProfilePic);
+
+        try{
+            likes = post.getLikes();
+            if(likes.contains(userId)){
+                holder.btnLike.setSelected(true);
+            }else{
+                holder.btnLike.setSelected(false);
+            }
+
+            holder.tvLikes.setText(Integer.toString(likes.size()) + " Likes");
+
+        }catch(NullPointerException e){
+            e.printStackTrace();
+            holder.tvLikes.setText("0 Likes");
+        }
 
     }
 
@@ -137,8 +157,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         @BindView(R.id.tvUsername2) TextView tvUsername2;
         @BindView(R.id.ivProfilePic) ParseImageView ivProfilePic;
         @BindView(R.id.btnLike) ImageButton btnLike;
+        @BindView(R.id.tvLikes) TextView tvLikes;
 
-        public ViewHolder(View itemView){
+        public ViewHolder(View itemView) {
             super(itemView);
 
             //bind views from xml file
@@ -147,12 +168,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             btnLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    view.setSelected(!view.isSelected());
+
+                    if (view.isSelected()) {
+                        view.setSelected(false);
+
+                        try{
+                            likes.remove(userId);
+                            tvLikes.setText(Integer.toString(likes.size()) + " Likes");
+                        }catch(NullPointerException e){
+                            e.printStackTrace();
+                        }
+
+
+                    } else {
+                        view.setSelected(true);
+                        try{
+                            likes.add(userId);
+                            tvLikes.setText(Integer.toString(likes.size()) + " Likes");
+                        }catch(NullPointerException e){
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
 
         }
-
 
     }
 }

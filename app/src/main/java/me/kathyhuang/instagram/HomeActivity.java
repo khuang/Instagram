@@ -114,7 +114,9 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
             public void onPageScrollStateChanged(int i) {
 
             }
+
         });
+
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -170,26 +172,6 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
             }
         });
     }
-
-//    public void onUserProfileClick(View view) {
-//
-//        String user = view.toString();
-//        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-//        // Define our query conditions
-//        query.whereEqualTo("user", user);
-//        query.findInBackground(new FindCallback<ParseUser>() {
-//            @Override
-//            public void done(List<ParseUser> objects, ParseException e) {
-//                if(e == null){
-//                    ((DetailProfileFragment)fragments.get(3)).user = objects.get(0);
-//                }else{
-//                    e.printStackTrace();
-//                }
-//        }
-//    });
-//        viewPager.setCurrentItem(3);
-//
-//    }
 
     @Override
     public void passUser(@NonNull ParseUser mUser) {
@@ -393,6 +375,7 @@ public class HomeActivity extends AppCompatActivity implements ProfileFragment.O
             startActivityForResult(intent, CAPTURE_PROFILE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
+
 }
 
 

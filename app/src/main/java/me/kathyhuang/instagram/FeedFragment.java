@@ -37,6 +37,8 @@ public class FeedFragment extends Fragment {
     PostAdapter postAdapter;
     ArrayList<Post> posts;
 
+    String userId;
+
     private PostAdapter.Callback callback;
 
     @Override
@@ -76,7 +78,6 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
 
         return view;
 
